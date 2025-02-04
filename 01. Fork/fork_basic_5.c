@@ -5,7 +5,7 @@
 
 void main(void) {
     pid_t pid; /*holds process-id in parent*/
-    char answer[1];
+    char answer[5];
 
     printf("Just One Process so far\n");
     pid = fork(); /* create new process */
