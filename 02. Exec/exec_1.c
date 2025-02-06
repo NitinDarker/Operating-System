@@ -5,8 +5,7 @@
 
 int main(void) {
     printf("Executing ls\n");
-
-    execl("/bin/ls", "ls", "-1a", (char *)0);
+    execl("/bin/ls", "love", "-1a", (char *)0);
 
     /* If excel returns back, the call has failed... */
     perror("execl could not run ls");

@@ -15,7 +15,7 @@ int main(void) {
         /* child process call the library routine sleep to suspend execution for few seconds*/
         printf("\nMessage from a Child Process\n");
     sleep(3);
-    exit(5); /* exit with non-zero value */
+    // exit(5); /* exit with non-zero value */
 
     /* Parent Process waiting for child process */
 
