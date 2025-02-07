@@ -55,8 +55,6 @@ chmod +x script.sh
 ./script.sh
 ```
 
-
-
 ### **3️⃣ Running C Programs**
 
 ```sh
