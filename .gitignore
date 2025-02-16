@@ -1,4 +1,5 @@
 *.exe
 *.out
 .vscode/
+key.txt
 bin/
