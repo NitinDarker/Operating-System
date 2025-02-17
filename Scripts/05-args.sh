@@ -23,5 +23,5 @@ num2=$2
 sum=$((num1+num2))
 echo $sum
 # Remember this syntax for addition of numbers
-# First parenthesis is for command interpret like $(command)
-# Second parenthesis is for evaluating expression
+# Outer parenthesis is for command interpret like $(command)
+# Inner parenthesis is for evaluating expression

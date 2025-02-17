@@ -17,7 +17,7 @@ echo Hello "  " World
 echo Hello "World"
 echo "Hello" World
 echo "Hello "*" World" # Interesting, Why??
-echo "Hello" * "World"
+echo "Hello " * " World"
 echo 'hello world' # Single quotes same as double quotes, Any differences?
 echo 'hello' world
 echo `hello world` # Backtick is used for commands, I guess

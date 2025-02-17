@@ -9,7 +9,7 @@ echo "Hey! I am $name"
 # These shell variables can store any data type but they all are interpreted as strings by bash
 
 # To read the input by the user, use read command
-# It can even read whitspaces
+# It can even read whitespaces
 
 echo "What is your name?"
 read input

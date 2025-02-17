@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### Conditional statements -> if/else
-# Use square brackets '[]' for the if condition and separate characters with whitspaces
+# Use square brackets '[]' for the if condition and separate characters with whitespaces
 
 echo "Enter a number: "
 read x
@@ -11,7 +11,7 @@ else
 	echo "$x is smaller than 1"
 fi
 
-## Arithematic Comparisons:
+## Arithmetic Comparisons:
 # $a -gt $b ( $a > $b)
 # $a -lt $b ( $a < $b)
 # $a -ge $b ( $a >= $b)
@@ -21,8 +21,8 @@ fi
 
 echo "Enter your name: "
 read name
-if [ $name == "Moto" ]; then
-	echo "Hello Moto"
+if [ $name == "moto" ]; then
+	echo "Hello moto"
 else
 	echo "You are not moto!"
 fi
