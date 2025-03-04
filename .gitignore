@@ -3,4 +3,5 @@
 .vscode/
 bin/
 key.txt
+key.md
 test.c
