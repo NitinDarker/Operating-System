@@ -7,5 +7,6 @@ int main(void) {
     fork();
     fork();
     fork();
+    fork();
     printf("Unix program\n");
 }
