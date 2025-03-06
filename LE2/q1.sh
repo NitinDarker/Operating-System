@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Que : 1. Write down a shell script which lists top 10 processes using highest amount of main memory.
+
+echo "Top 10 process with high memory usages"
+printf "%-10s %-10s %-15s %-s\n" "PID" "USER" "MEM" "COMMAND"
+echo "-------------------------------------------"
+ps -eo pid,user,%mem,cmd --sort=-%mem | head -11
