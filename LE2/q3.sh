@@ -9,7 +9,6 @@ get_proc_info() {
 
 get_info_by_pid() {
     echo "-------------------------------------------"
-    echo ""
     read -p "Enter the PID: " pid
 
     if ! ps -p "$pid" > /dev/null 2>&1; then
@@ -19,13 +18,12 @@ get_info_by_pid() {
     fi
 
     echo ""
-    echo -e "PID: $pid \n\n"
-    echo -e "CPU Usage: $(ps -p $pid -o %cpu=) \n\n"
-    echo -e "Memory Usage: $(ps -p $pid -o %mem=) \n\n"
-    echo -e "Command: $(ps -p $pid -o comm=) \n\n"
-    echo -e "Priority: $(ps -p $pid -o pri=) \n\n"
-    echo -e "File Descriptors: $(lsof -p $pid 2>/dev/null | wc -l) \n\n"
-
+    echo -e "PID: $pid \n"
+    echo -e "Command: $(ps -p $pid -o comm=) \n"
+    echo -e "CPU Usage: $(ps -p $pid -o %cpu=) \n"
+    echo -e "Memory Usage: $(ps -p $pid -o %mem=) \n"
+    echo -e "Priority: $(ps -p $pid -o pri=) \n"
+    echo -e "File Descriptors: $(lsof -p $pid 2>/dev/null | wc -l)"
     echo "-------------------------------------------"
 }
 
@@ -43,18 +41,19 @@ top_live() {
 
 process_num() {
     num=$(ps -e | wc -l)
-    echo "Number of processes running = $num"
+    echo "\nNumber of processes running = $num"
 }
 
 # Menu-based interface:
 while true
 do
     echo "-------------------------------------------"
-    echo "1. Display process information"
-    echo "2. Show live process information"
-    echo "3. Show info by PID"
-    echo "4. Show the number of running processes"
-    echo "5. Exit"
+    echo -e "Welcome to Nitin's Menu... \n"
+    echo "1. Display current stats of all the running processes"
+    echo "2. Display LIVE stats of all the running processes"
+    echo "3. Show info by Process PID"
+    echo "4. Show the number of currently running processes"
+    echo "5. Exit."
     echo ""
     echo -e "Enter your choice: \c"
     read choice
