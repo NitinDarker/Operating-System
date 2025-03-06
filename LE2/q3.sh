@@ -3,7 +3,7 @@
 
 get_proc_info() {
     echo "-------------------------------------------"
-    ps -eo pid,%cpu,%mem,pri,fd,comm --sort=+%cpu
+    ps -eo pid,%cpu,%mem,pri,comm --sort=+%cpu
     echo "-------------------------------------------"
 }
 
@@ -64,7 +64,7 @@ do
             get_proc_info
             ;;
         2)
-            top
+            top_live
             ;;
         3)
             get_info_by_pid
