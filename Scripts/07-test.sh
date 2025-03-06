@@ -4,7 +4,7 @@
 # test statement are mostly used in if/else and loop condition block
 
 # Numeric comparisons are restricted to integers only!
-x=5; y=7; z=7.2
+x=5; y=7; z=7
 test $x -eq $y ; echo $?
 test $x -lt $y ; echo $?
 test $z -gt $y ; echo $?
