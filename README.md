@@ -1,6 +1,6 @@
-# 🖥️ Operating System Learning Repository
+# 🖥️ Operating System Repository
 
-Welcome to my **Operating System Learning** repository! This is where I store all my **notes, assignments, shell scripts, and C programs** related to Operating Systems as a **Computer Science student**.
+Welcome to my **Operating System** repository! This is where I store all my **Lab Assignments, shell scripts, and C programs** related to Operating Systems. I use *arch* btw.
 
 ---
 
@@ -8,23 +8,19 @@ Welcome to my **Operating System Learning** repository! This is where I store al
 
 This repository contains:
 
-✅ **Shell Scripts (`.sh` files)** – Scripts for Linux commands, automation, and process management.  
-✅ **C Programs (`.c` files)** – Code for process creation (`fork()`, `exec()`) and system calls.  
-✅ **College Assignments** – All OS-related assignments and solutions.  
+✅ **Shell Scripts (`.sh` files)** – Scripts for Elementary Shell scripting, Linux commands, process creation, and process management.  
+
+✅ **C Programs (`.c` files)** – C Source Codes for process creation and implementing system calls like `fork()`, `exec()`, `status()`, `wait()`, `exit()`, etc.  
+
+✅ **Lab Assignments** – All OS-related assignments and solutions.  
+
 ✅ **Linux Commands & Notes** – Useful Linux commands and concepts.
-
----
-
-## 📂 Folder Structure
-
-📁 Operating-System-Learning/ │── 📁 Shell-Scripts/ # Shell scripts for Linux commands & automation │── 📁 C-Programs/ # C programs for process handling │── 📁 Assignments/ # College assignments & solutions │── 📁 Notes/ # Theory notes & explanations │── README.md # This file
-
 
 ---
 
 ## 🛠️ Topics Covered
 
-🔹 **Shell Scripting & Linux Commands**  
+🔹 **Shell Scripting & Linux Commands**
 - Basic shell scripting  
 - File handling, loops, and automation  
 - Process management (`ps`, `kill`, `bg`, `fg`)  
@@ -45,26 +41,23 @@ This repository contains:
 ## 🚀 How to Use
 
 ### **1️⃣ Clone the Repository**
+
 ```sh
-git clone https://github.com/your-username/Operating-System-Learning.git
-cd Operating-System-Learning
+git clone https://github.com/NitinDarker/Operating-System
 
-2️⃣ Running Shell Scripts
+cd Operating-System
+```
 
+### **2️⃣ Running Shell Scripts**
+
+```sh
 chmod +x script.sh
 ./script.sh
+```
 
-3️⃣ Running C Programs
+### **3️⃣ Running C Programs**
 
+```sh
 gcc filename.c -o output
 ./output
-
-📢 Contributions & Suggestions
-
-This repository is mainly for my personal learning, but if you have any suggestions, feel free to open an issue or submit a pull request! 🚀
-📜 License
-
-This repository is for educational purposes only. Feel free to use and modify the scripts for learning!
-
-🔹 Happy Coding! 🚀
-🔹 Keep Exploring OS Concepts! 💻
+```
