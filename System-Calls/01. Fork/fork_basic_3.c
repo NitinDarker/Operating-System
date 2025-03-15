@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 int main(void) {
+    // Creates 2^4=16 processes (including parent)
     fork();
     fork();
     fork();

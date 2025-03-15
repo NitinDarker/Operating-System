@@ -3,4 +3,6 @@
 .vscode/
 bin/
 key.txt
-key.md
+Notes/
+test.sh
+test.c
