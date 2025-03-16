@@ -12,3 +12,5 @@ void main(void) {
     perror("execv could not run ls");
     exit(1);
 }
+// execv same as execl just 2nd to last arguments are stored in a vector
+// vector means constant array of strings
