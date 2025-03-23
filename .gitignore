@@ -1,8 +1,7 @@
+.vscode/
+Notes/
 *.exe
 *.out
-.vscode/
-bin/
-key.txt
-Notes/
 test.sh
 test.c
+key.txt

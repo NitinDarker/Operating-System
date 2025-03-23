@@ -22,17 +22,18 @@ void main(void) {
     } 
     else if (pid == 0) {
         // Child process
-        printf("\nPID = %d\n", pid);
-        printf("Hi! I am child process!\n");
+        printf("\nHi! I am child process!\n");
+        printf("PID = %d\n", getpid());
+        printf("PPID = %d\n", getppid());
         printf("I will be exiting now...\n\n");
         exit(0);
     } 
     else {
         // Parent process
         sleep(1);
-        printf("Hello! I am the parent process!\n");
+        printf("\nHello! I am the parent process!\n");
+        printf("PID = %d\n", getpid());
         printf("Checking the state of my child now...\n");
-        printf("\nPID = %d\n", pid);
         checkZombie(pid);
     }
 }
