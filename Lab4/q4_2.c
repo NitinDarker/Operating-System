@@ -8,7 +8,7 @@
 #include <fcntl.h>
 
 #define SHM_NAME "/fork_bomb_shm"
-#define MAX_FORKS 10000
+#define MAX_FORKS 1000
 
 // volatile sig_atomic_t *fork_count;
 

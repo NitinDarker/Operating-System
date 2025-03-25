@@ -10,8 +10,7 @@ void main(void) {
 	int status;
 	if (pid < 0) {
 		perror("Fork failed");
-	}
-	else if (pid > 0) {
+	} else if (pid > 0) {
 		// Parent process
 		wait(&status);
 	}
@@ -30,5 +29,3 @@ void main(void) {
 	}
 	exit(0);
 }
-
-

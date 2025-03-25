@@ -1,23 +1,19 @@
 #!/bin/bash
 
 # Scientific Calculator Script
-# Supports: Trigonometric operations, Logarithms, Exponents and basic operations
 
-# Define math library with extended precision
-BC_LIB=$(
-    cat <<'EOL'
-scale=10;
-define pi() {
-  return 4*a(1);
-}
-define to_rad(x) {
-  return x*pi()/180;
-}
-EOL
-)
+# Define bc functions with extended precision
+BC_LIB='
+scale=10
+define pi() { return 4*a(1) }
+define to_rad(x) { return x*pi()/180 }
+define mod(x,y) { return x%y }
+define fact(n) { if (n<=1) return 1; return n*fact(n-1) }
+'
 
 show_menu() {
-    echo "===== Calculator ====="
+    clear
+    echo "===== Scientific Calculator ====="
     echo "1. Add       2. Subtract"
     echo "3. Multiply  4. Divide"
     echo "5. Modulo    6. Power"
@@ -27,178 +23,121 @@ show_menu() {
     echo "13. e^x      14. |x|"
     echo "15. Factorial 16. Expression"
     echo "0. Exit"
-    echo "======================"
+    echo "================================"
 }
 
-# Function to get numeric input with validation
 get_number() {
     local prompt=$1
     local num
-
+    
     while true; do
         read -p "$prompt" num
-        if [[ $num =~ ^[+-]?[0-9]*\.?[0-9]+$ ]]; then
+        if [[ $num =~ ^[+-]?([0-9]+(\.[0-9]*)?|\.[0-9]+)$ ]]; then
             echo "$num"
             return 0
         else
-            echo "Error: Please enter a valid number."
+            echo "Error: Please enter a valid number (e.g. 5, -3.14, .75)"
         fi
     done
 }
 
-# Function to calculate factorial
-factorial() {
-    local n=$1
-    local result=1
-
-    if ((n < 0)); then
-        echo "Error: Factorial is not defined for negative numbers."
-        return 1
-    elif ((n == 0)); then
-        echo 1
-        return 0
-    fi
-
-    for ((i = 1; i <= n; i++)); do
-        result=$((result * i))
-    done
-
-    echo "$result"
-}
-
-# Main calculator logic
 calculate() {
     local choice=$1
     local result
+    
+    case $choice in
+    1|2|3|4|5|6) # Binary operations
+        n1=$(get_number "Enter first number: ")
+        n2=$(get_number "Enter second number: ")
+        ;;
+    *)
+        n1=$(get_number "Enter number: ")  # Single argument operations
+        ;;
+    esac
 
     case $choice in
-    1) # Addition
-        n1=$(get_number "Enter first number: ")
-        n2=$(get_number "Enter second number: ")
-        result=$(echo "$BC_LIB; $n1 + $n2" | bc -l)
-        ;;
-    2) # Subtraction
-        n1=$(get_number "Enter first number: ")
-        n2=$(get_number "Enter second number: ")
-        result=$(echo "$BC_LIB; $n1 - $n2" | bc -l)
-        ;;
-    3) # Multiplication
-        n1=$(get_number "Enter first number: ")
-        n2=$(get_number "Enter second number: ")
-        result=$(echo "$BC_LIB; $n1 * $n2" | bc -l)
-        ;;
-    4) # Division
-        n1=$(get_number "Enter numerator: ")
-        n2=$(get_number "Enter denominator: ")
+    1) result=$(echo "$BC_LIB; $n1 + $n2" | bc -l) ;;
+    2) result=$(echo "$BC_LIB; $n1 - $n2" | bc -l) ;;
+    3) result=$(echo "$BC_LIB; $n1 * $n2" | bc -l) ;;
+    4) 
         if [[ $(echo "$n2 == 0" | bc -l) -eq 1 ]]; then
-            echo "Error: Division by zero!"
+            echo "Error: Division by zero!" >&2
             return 1
         fi
         result=$(echo "$BC_LIB; $n1 / $n2" | bc -l)
         ;;
-    5) # Modulo
-        n1=$(get_number "Enter dividend: ")
-        n2=$(get_number "Enter divisor: ")
-        result=$(echo "$BC_LIB; $n1 % $n2" | bc -l)
-        ;;
-    6) # Power
-        n1=$(get_number "Enter base: ")
-        n2=$(get_number "Enter exponent: ")
-        result=$(echo "$BC_LIB; $n1 ^ $n2" | bc -l)
-        ;;
-    7) # Sine
-        n1=$(get_number "Enter angle in degrees: ")
-        result=$(echo "$BC_LIB; s(to_rad($n1))" | bc -l)
-        ;;
-    8) # Cosine
-        n1=$(get_number "Enter angle in degrees: ")
-        result=$(echo "$BC_LIB; c(to_rad($n1))" | bc -l)
-        ;;
-    9) # Tangent
-        n1=$(get_number "Enter angle in degrees: ")
-        if [[ $(echo "($n1 - 90) % 180 == 0" | bc -l) -eq 1 ]]; then
-            echo "Error: Tangent is undefined at $n1 degrees."
+    5) result=$(echo "$BC_LIB; $n1 % $n2" | bc -l) ;;
+    6) result=$(echo "$BC_LIB; $n1 ^ $n2" | bc -l) ;;
+    7) result=$(echo "$BC_LIB; s(to_rad($n1))" | bc -l) ;;
+    8) result=$(echo "$BC_LIB; c(to_rad($n1))" | bc -l) ;;
+    9)
+        cos_val=$(echo "$BC_LIB; c(to_rad($n1))" | bc -l)
+        if [[ $(echo "$cos_val == 0" | bc -l) -eq 1 ]]; then
+            echo "Error: Tangent undefined at $n1 degrees" >&2
             return 1
         fi
-        result=$(echo "$BC_LIB; s(to_rad($n1))/c(to_rad($n1))" | bc -l)
+        result=$(echo "$BC_LIB; s(to_rad($n1))/$cos_val" | bc -l)
         ;;
-    10) # Natural logarithm
-        n1=$(get_number "Enter a positive number: ")
+    10)
         if [[ $(echo "$n1 <= 0" | bc -l) -eq 1 ]]; then
-            echo "Error: Logarithm is defined only for positive numbers."
+            echo "Error: ln requires positive number" >&2
             return 1
         fi
         result=$(echo "$BC_LIB; l($n1)" | bc -l)
         ;;
-    11) # Base-10 logarithm
-        n1=$(get_number "Enter a positive number: ")
+    11)
         if [[ $(echo "$n1 <= 0" | bc -l) -eq 1 ]]; then
-            echo "Error: Logarithm is defined only for positive numbers."
+            echo "Error: log10 requires positive number" >&2
             return 1
         fi
         result=$(echo "$BC_LIB; l($n1)/l(10)" | bc -l)
         ;;
-    12) # Square root
-        n1=$(get_number "Enter a non-negative number: ")
+    12)
         if [[ $(echo "$n1 < 0" | bc -l) -eq 1 ]]; then
-            echo "Error: Square root is not defined for negative numbers."
+            echo "Error: sqrt requires non-negative number" >&2
             return 1
         fi
         result=$(echo "$BC_LIB; sqrt($n1)" | bc -l)
         ;;
-    13) # Exponential e^x
-        n1=$(get_number "Enter exponent: ")
-        result=$(echo "$BC_LIB; e($n1)" | bc -l)
-        ;;
-    14) # Absolute value
-        n1=$(get_number "Enter a number: ")
-        result=$(echo "$BC_LIB; if($n1<0) -$n1 else $n1" | bc -l)
-        ;;
-    15) # Factorial
-        n1=$(get_number "Enter a non-negative integer: ")
-        if [[ ! $n1 =~ ^[0-9]+$ ]]; then
-            echo "Error: Factorial requires a non-negative integer."
+    13) result=$(echo "$BC_LIB; e($n1)" | bc -l) ;;
+    14) result=$(echo "$BC_LIB; abs($n1)" | bc -l) ;;
+    15)
+        if [[ ! $n1 =~ ^[0-9]+$ || $n1 -lt 0 ]]; then
+            echo "Error: Factorial requires non-negative integer" >&2
             return 1
         fi
-        result=$(factorial "$n1")
+        result=$(echo "$BC_LIB; fact($n1)" | bc -l)
         ;;
-    16) # Evaluate an expression
-        read -p "Enter a mathematical expression: " expression
-        result=$(echo "$BC_LIB; $expression" | bc -l 2>/dev/null)
-        if [[ $? -ne 0 ]]; then
-            echo "Error: Invalid expression."
+    16)
+        read -p "Enter expression (numbers and +-*/^ only): " expr
+        # Basic sanitization
+        if [[ ! $expr =~ ^[0-9+\-*/\^\.\(\) ]+$ ]]; then
+            echo "Error: Invalid characters in expression" >&2
+            return 1
+        fi
+        result=$(echo "$BC_LIB; $expr" | bc -l 2>&1)
+        if [[ $result == *"error"* ]]; then
+            echo "Error: Invalid expression" >&2
             return 1
         fi
         ;;
     *)
-        echo "Invalid option!"
+        echo "Invalid option!" >&2
         return 1
         ;;
     esac
 
-    # Format result to remove trailing zeros if it's a whole number
-    if [[ $result =~ \.0+$ ]]; then # regex used here
-        result=$(echo "$result" | sed 's/\.0*$//')
-    fi
-
-    echo "Result: $result"
+    printf "Result: %.10g\n" "$result"  # Clean up trailing zeros
 }
 
-# Main program loop
+# Main program
 while true; do
     show_menu
-    read -p "Enter your choice (0-16): " choice
-
-    if [[ $choice -eq 0 ]]; then
-        echo "Thank you for using the Scientific Calculator!"
-        exit 0
-    elif [[ $choice -ge 1 && $choice -le 16 ]]; then
-        calculate "$choice"
-    else
-        echo "Invalid option! Please select a number between 0 and 16."
-    fi
-
-    echo
+    read -p "Enter choice (0-16): " choice
+    case $choice in
+        0) echo "Goodbye!"; exit 0 ;;
+        [1-9]|1[0-6]) calculate "$choice" ;;
+        *) echo "Invalid choice!" >&2 ;;
+    esac
     read -p "Press Enter to continue..."
-    clear
 done
