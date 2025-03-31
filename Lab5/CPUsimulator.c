@@ -1,24 +1,32 @@
+#include "./EDF.c"
+#include "./HRRN.c"
+#include "./Lottery.c"
 #include "./SJF.c"
 #include "./SRTN.c"
 #include "./fcfs.c"
+#include "./roundRobin.c"
 #include "generateResult.h"
 #include "proc.h"
 #include "random.c"
 #include <stdio.h>
 #include <stdlib.h>
 
-// void generate_text_output(proc *arr, int n, char *algo);
 int getRandom(int min, int max);
 void randomize(proc *procList, int procNum);
 void fcfs(proc *procList, int procNum);
 void sjf(proc *procList, int procNum);
 void srtn(proc *procList, int procNum);
+void round_robin(proc *procList, int procNum, int quantum);
+void run_round_robin(proc *procList, int procNum);
+void hrrn(proc *procList, int procNum);
+void lottery(proc *procList, int procNum);
+void edf(proc *procList, int procNum);
 
 int main() {
     printf("\n\n------------------------------\n");
     printf("Welcome to the Nitin's CPU Scheduling Algorithm Simulator!\n\n");
     printf("Please select a scheduling Algorithm:\n");
-    printf("(1) FCFS \n(2) RR \n(3) SJF \n(4) SRTN \n(5) HRRN \n(6) Lottery \n(7) EDF \n(8) Priority \n(9) All \n> ");
+    printf("(1) FCFS \n(2) SJF \n(3) SRTN \n(4) RR \n(5) HRRN \n(6) Lottery \n(7) EDF \n(8) All \n> ");
 
     int algo;
     scanf("%d", &algo);
@@ -31,37 +39,43 @@ int main() {
     proc *procList = (proc *)calloc(procNum, sizeof(proc));
     randomize(procList, procNum);
 
-    fcfs(procList, procNum);
-    sjf(procList, procNum);
-    srtn(procList, procNum);
+    printf("\n\nPlease Wait... Generating Schedules...\n\n");
 
-    // printf("\n\nPlease Wait... Generating Schedules...\n");
-    // sleep(5);
+    switch (algo) {
+    case 1:
+        fcfs(procList, procNum);
+        break;
+    case 2:
+        sjf(procList, procNum);
+        break;
+    case 3:
+        srtn(procList, procNum);
+        break;
+    case 4:
+        run_round_robin(procList, procNum);
+        break;
+    case 5:
+        hrrn(procList, procNum);
+        break;
+    case 6:
+        lottery(procList, procNum);
+        break;
+    case 7:
+        edf(procList, procNum);
+        break;
+    case 8:
+        fcfs(procList, procNum);
+        sjf(procList, procNum);
+        srtn(procList, procNum);
+        run_round_robin(procList, procNum);
+        hrrn(procList, procNum);
+        lottery(procList, procNum);
+        edf(procList, procNum);
+        break;
+    default:
+        break;
+    }
 
-    // switch (algo) {
-    //     // TODO
-    // }
-
+    printf("All the results are stored in schedule.txt\n");
     return 0;
 }
-
-/*
-
-Utilization Matrices for:
-a. CPU Utilization
-b. Waiting time of each process and average waiting time
-c. Response time of each process and average response time
-d. Turn-around time of each process and average turn-around time
-
-Randomly Generate:
-1) Arrival Time
-2) CPU Burst or Execution time
-3) Deadline
-
-Create a file process_data.tex which contains randomly generated data for given no. of processes.
-
-Additional features.
-1) Gantt charts
-2) Comparison table at the end for all the algorithms.
-
-*/
