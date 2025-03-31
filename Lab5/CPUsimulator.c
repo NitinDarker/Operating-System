@@ -1,6 +1,15 @@
-#include "fcfs.c"
+#include "fcfs.h"
+#include "proc.h"
+#include "random.c"
 #include <stdio.h>
 #include <stdlib.h>
+
+// Function declarations from random.c
+int getRandom(int min, int max);
+void randomize(proc *procList, int procNum);
+
+// Function declaration from fcfs.c
+int fcfs(proc *procList, int procNum);
 
 int main() {
     printf("\n\n------------------------------\n");
@@ -12,15 +21,21 @@ int main() {
     scanf("%d", &algo);
 
     printf("\nEnter the number of processes in the system: ");
-    int proc;
-    scanf("%d", proc);
+    int procNum;
+    scanf("%d", &procNum);
 
-    printf("\n\nPlease Wait... Generating Schedules...\n");
-    sleep(10);
+    // Generate a list of processes
+    proc *procList = (proc *)calloc(procNum, sizeof(proc));
+    randomize(procList, procNum);
 
-    switch (algo) {
-        // TODO
-    }
+    fcfs(procList, procNum);
+
+    // printf("\n\nPlease Wait... Generating Schedules...\n");
+    // sleep(5);
+
+    // switch (algo) {
+    //     // TODO
+    // }
 
     return 0;
 }

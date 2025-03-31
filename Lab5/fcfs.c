@@ -1,43 +1,14 @@
-#include "random.c"
+#include "fcfs.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 /*
  * First-Come, First Served Algorithm
- * Randomly Generated Arrival Time
- * Randomly Generated Execution/Burst Time
  * Non-Preemptive
  * Sort on the basis of Arrival Time
  */
-
-struct proc {
-    int id;         // Process Number
-    int arrival;    // Arrival Time (in seconds)
-    int burst;      // Execution Time (in seconds)
-    int waiting;    // Waiting Time
-    int response;   // Response Time
-    int turnaround; // Turnaround Time
-    int time;       // Counter for time (for Gantt chart)
-} typedef proc;
-
-void print(proc *arr, int n);
-
-int fcfs(int procNum) {
-    proc *procList = (proc *)calloc(procNum, sizeof(proc));
-
-    for (int i = 0; i < procNum; i++) {
-        procList[i].id = i + 1;
-        procList[i].arrival = getRandom(0, procNum);
-        procList[i].burst = getRandom(1, 2 * procNum);
-
-        // Will evaluate later
-        procList[i].waiting = 0;
-        procList[i].response = 0;
-        procList[i].turnaround = 0;
-        procList[i].time = 0;
-    }
-
-    // Sort based on Arrival Time
+int fcfs(proc *procList, int procNum) {
+    // Sort based on Arrival Time -> Selection Sort
     for (int i = 0; i < procNum; i++) {
         int least = i;
         for (int j = i + 1; j < procNum; j++) {
@@ -52,35 +23,86 @@ int fcfs(int procNum) {
         }
     }
 
-    // Iterate over all the processes
-    for (int i = 0; i < procNum; i++) {
+    // Calculate times for first process
+    procList[0].waiting = 0;
+    procList[0].response = 0;
+    procList[0].time = procList[0].arrival + procList[0].burst;
+    procList[0].turnaround = procList[0].burst;
+
+    // Calculate times for remaining processes
+    for (int i = 1; i < procNum; i++) {
         proc *p = &procList[i];
         proc *prev = &procList[i-1];
-        if (i == 0) {
+
+        // Set completion time based on previous process
+        if (p->arrival > prev->time) {
+            p->time = p->arrival + p->burst;
             p->waiting = 0;
-            p->response = 0;
-            p->turnaround = p->burst;
-            p->time = p->arrival + p->turnaround;
-            continue;
+        } else {
+            p->time = prev->time + p->burst;
+            p->waiting = prev->time - p->arrival;
         }
-        prev->time - p->arrival > 0 ? (p->waiting = prev->time - p->arrival) : 0;
+        
         p->response = p->waiting;
-        p->time = prev->time + p->burst; // Time (in seconds) when the process completes
-        p->turnaround = p->waiting + p->burst;
+        p->turnaround = p->time - p->arrival;
     }
 
-    print(procList, procNum);
-    free(procList);
+    generate_text_output(procList, procNum);
+    return 0;
 }
 
-// For experimental purposes:
-void print(proc *arr, int n) {
+/*
+ * Generate text-based output for FCFS scheduling
+ * Creates a table showing process details and metrics
+ */
+void generate_text_output(proc *arr, int n) {
+    FILE *file = fopen("fcfs_schedule.txt", "w");
+    if (file == NULL) {
+        printf("Error opening file for writing.\n");
+        return;
+    }
+
+    // Calculate averages
+    float avg_waiting = 0, avg_response = 0, avg_turnaround = 0;
     for (int i = 0; i < n; i++) {
-        printf("ID: %d\nAr: %d\nBu: %d\n", arr[i].id, arr[i].arrival, arr[i].burst);
-        printf("Ti: %d\nRe: %d\nWa: %d\nTu: %d\n\n", arr[i].time, arr[i].response, arr[i].waiting, arr[i].turnaround);
+        avg_waiting += arr[i].waiting;
+        avg_response += arr[i].response;
+        avg_turnaround += arr[i].turnaround;
     }
+    avg_waiting /= n;
+    avg_response /= n;
+    avg_turnaround /= n;
+
+    // Print process table
+    fprintf(file, "FCFS Process Scheduling Table\n");
+    fprintf(file, "_____________________________________________________________________________\n");
+    fprintf(file, "| Proc ID | Arrival | Burst | Completion | Waiting | Response | Turnaround |\n");
+    fprintf(file, "|_________|_________|_______|____________|_________|__________|____________|\n");
+
+    for (int i = 0; i < n; i++) {
+        fprintf(file, "| %-7d | %-7d | %-5d | %-10d | %-7d | %-8d | %-10d |\n",
+                arr[i].id,
+                arr[i].arrival,
+                arr[i].burst,
+                arr[i].time,
+                arr[i].waiting,
+                arr[i].response,
+                arr[i].turnaround);
+    }
+
+    fprintf(file, "|_________|_________|_______|____________|_________|__________|____________|\n\n");
+
+    // Print averages
+    fprintf(file, "Average Times:\n");
+    fprintf(file, "_________________________________\n");
+    fprintf(file, "| Metric      | Average Value   |\n");
+    fprintf(file, "|_____________|_________________|\n");
+    fprintf(file, "| Waiting     | %-15.2f |\n", avg_waiting);
+    fprintf(file, "| Response    | %-15.2f |\n", avg_response);
+    fprintf(file, "| Turnaround  | %-15.2f |\n", avg_turnaround);
+    fprintf(file, "|_____________|_________________|\n");
+
+    fclose(file);
+    printf("FCFS scheduling results have been written to fcfs_schedule.txt\n");
 }
 
-int main() {
-    fcfs(10);
-}
