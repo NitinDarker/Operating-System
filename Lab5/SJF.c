@@ -4,18 +4,20 @@
 #include <stdlib.h>
 
 /*
- * First-Come, First-Served (FCFS) Algorithm
+ * Shortest Job First (SJF) Algorithm
  * Non-Preemptive
- * Sort on the basis of Arrival Time
+ * Assuming Arrival Time = 0 for all processes
+ * Process with least burst time executes first
+ * In case of a tie, FCFS (First-Come-First-Serve) is used.
  */
 
-void fcfs(proc *procList, int procNum) {
+void sjf(proc *procList, int procNum) {
 
-    // Sort based on Arrival Time -> Selection Sort
+    // Sort based on Burst Time -> Selection Sort
     for (int i = 0; i < procNum; i++) {
         int least = i;
         for (int j = i + 1; j < procNum; j++) {
-            if (procList[j].arrival < procList[least].arrival) {
+            if (procList[j].burst < procList[least].burst) {
                 least = j;
             }
         }
@@ -25,30 +27,28 @@ void fcfs(proc *procList, int procNum) {
             procList[least] = temp;
         }
     }
-  
+
+    // Neglecting Arrival Time of all the processes
+
     // Calculate times for first process
     procList[0].waiting = 0;
     procList[0].response = 0;
-    procList[0].time = procList[0].arrival + procList[0].burst;
+    procList[0].time = procList[0].burst;
     procList[0].turnaround = procList[0].burst;
+    // procList[0].arrival = 0;
 
     // Calculate times for remaining processes
     for (int i = 1; i < procNum; i++) {
         proc *p = &procList[i];
         proc *prev = &procList[i - 1];
 
-        if (p->arrival > prev->time) {
-            p->time = p->arrival + p->burst;
-            p->waiting = 0;
-        } else {
-            p->time = prev->time + p->burst;
-            p->waiting = prev->time - p->arrival;
-        }
-
+        p->waiting = prev->time;
         p->response = p->waiting;
-        p->turnaround = p->time - p->arrival;
+        p->time = prev->time + p->burst;
+        p->turnaround = p->time;
+        // p->arrival = 0;
     }
 
     // Output the result in a text file
-    generate_text_output(procList, procNum, "FCFS");
+    generate_text_output(procList, procNum, "SJF");
 }

@@ -1,15 +1,18 @@
-#include "fcfs.h"
+#include "./SJF.c"
+#include "./SRTN.c"
+#include "./fcfs.c"
+#include "generateResult.h"
 #include "proc.h"
 #include "random.c"
 #include <stdio.h>
 #include <stdlib.h>
 
-// Function declarations from random.c
+// void generate_text_output(proc *arr, int n, char *algo);
 int getRandom(int min, int max);
 void randomize(proc *procList, int procNum);
-
-// Function declaration from fcfs.c
-int fcfs(proc *procList, int procNum);
+void fcfs(proc *procList, int procNum);
+void sjf(proc *procList, int procNum);
+void srtn(proc *procList, int procNum);
 
 int main() {
     printf("\n\n------------------------------\n");
@@ -29,6 +32,8 @@ int main() {
     randomize(procList, procNum);
 
     fcfs(procList, procNum);
+    sjf(procList, procNum);
+    srtn(procList, procNum);
 
     // printf("\n\nPlease Wait... Generating Schedules...\n");
     // sleep(5);
