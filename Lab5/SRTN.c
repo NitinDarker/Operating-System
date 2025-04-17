@@ -12,11 +12,11 @@
 
 void srtn(proc *procList, int procNum) {
     int completed = 0, currentTime = 0, minIndex;
-    int remaining[procNum], isCompleted[procNum];
+    int remaining[procNum];
+    int isCompleted[procNum];
 
-    // Initialize remaining burst times and completion status
     for (int i = 0; i < procNum; i++) {
-        remaining[i] = procList[i].burst;
+        remaining[i] = procList[i].burst; 
         procList[i].waiting = 0;
         procList[i].response = -1;
         isCompleted[i] = 0;
@@ -25,7 +25,6 @@ void srtn(proc *procList, int procNum) {
     while (completed < procNum) {
         minIndex = -1;
 
-        // Find process with the shortest remaining time that has arrived
         for (int i = 0; i < procNum; i++) {
             if (!isCompleted[i] && procList[i].arrival <= currentTime && remaining[i] > 0) {
                 if (minIndex == -1 || remaining[i] < remaining[minIndex]) {
@@ -35,7 +34,6 @@ void srtn(proc *procList, int procNum) {
         }
 
         if (minIndex == -1) {
-            // No process is available, move time to the next arriving process
             int earliestArrival = __INT_MAX__;
             for (int i = 0; i < procNum; i++) {
                 if (!isCompleted[i] && procList[i].arrival < earliestArrival) {
@@ -51,7 +49,6 @@ void srtn(proc *procList, int procNum) {
             procList[minIndex].response = currentTime - procList[minIndex].arrival;
         }
 
-        // Execute process for 1 unit of time
         remaining[minIndex]--;
         currentTime++;
 

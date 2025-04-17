@@ -27,7 +27,7 @@ void generate_text_output(proc *arr, int n, char *algo) {
     avg_turnaround /= n;
 
     // Print process table
-    fprintf(file, "\n\n%s Process Scheduling Table\n", algo);
+    fprintf(file, "%s Process Scheduling Table\n", algo);
     fprintf(file, "_____________________________________________________________________________\n");
     fprintf(file, "| Proc ID | Arrival | Burst | Completion | Waiting | Response | Turnaround |\n");
     fprintf(file, "|_________|_________|_______|____________|_________|__________|____________|\n");
@@ -53,7 +53,7 @@ void generate_text_output(proc *arr, int n, char *algo) {
     fprintf(file, "| Waiting     | %-15.2f |\n", avg_waiting);
     fprintf(file, "| Response    | %-15.2f |\n", avg_response);
     fprintf(file, "| Turnaround  | %-15.2f |\n", avg_turnaround);
-    fprintf(file, "|_____________|_________________|\n");
+    fprintf(file, "|_____________|_________________|\n\n\n");
 
     fclose(file);
 }

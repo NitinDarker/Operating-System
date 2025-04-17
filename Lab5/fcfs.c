@@ -25,7 +25,7 @@ void fcfs(proc *procList, int procNum) {
             procList[least] = temp;
         }
     }
-  
+
     // Calculate times for first process
     procList[0].waiting = 0;
     procList[0].response = 0;

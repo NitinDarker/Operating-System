@@ -43,10 +43,11 @@ int isEmpty(Queue *q) {
 
 void round_robin(proc *procList, int procNum, int quantum) {
     int completed = 0, currentTime = 0;
-    int isCompleted[procNum];
+    int isCompleted[procNum], remaining[procNum];
     Queue q = {NULL, NULL};
 
     for (int i = 0; i < procNum; i++) {
+        remaining[i] = procList[i].burst; 
         procList[i].waiting = 0;
         procList[i].response = -1;
         isCompleted[i] = 0;
@@ -71,8 +72,8 @@ void round_robin(proc *procList, int procNum, int quantum) {
             procList[index].response = currentTime - procList[index].arrival;
         }
 
-        int execTime = (procList[index].burst > quantum) ? quantum : procList[index].burst;
-        procList[index].burst -= execTime;
+        int execTime = (remaining[index] > quantum) ? quantum : remaining[index];
+        remaining[index] -= execTime;
         currentTime += execTime;
 
         while (nextArrival < procNum && procList[nextArrival].arrival <= currentTime) {
@@ -80,7 +81,7 @@ void round_robin(proc *procList, int procNum, int quantum) {
             nextArrival++;
         }
 
-        if (procList[index].burst > 0) {
+        if (remaining[index] > 0) {
             enqueue(&q, index);
         } else {
             completed++;

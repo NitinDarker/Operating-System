@@ -21,7 +21,6 @@ void hrrn(proc *procList, int procNum) {
         int selected = -1;
         double maxResponseRatio = -1.0;
 
-        // Calculate Highest Response Ratio of currently available processes
         for (int i = 0; i < procNum; i++) {
             if (!isCompleted[i] && procList[i].arrival <= currentTime) {
                 int waitingTime = currentTime - procList[i].arrival;
