@@ -2,30 +2,32 @@
 #include <stdio.h>
 #include <pthread.h>
 
-typedef struct {
-    double a, b;
-} pair;
-
-void quadratic() {
+typedef struct quadArg {
     int a, b, c;
-    printf("Enter the values of a, b, c: ");
-    scanf("%d %d %d", &a, &b, &c);
+} quadArg;
 
-    pair p;
+typedef struct exArg {
+    int x, n;
+} exArg;
+
+void quadratic(quadArg arg1) {
+    int a = arg1.a;
+    int b = arg1.b;
+    int c = arg1.c;
+
     double discriminant = b * b - 4 * a * c;
     if (discriminant < 0) {
         printf("x is Imaginary");
         return;
     }
-    p.a = (-b + sqrt(discriminant)) / (2.0 * a);
-    p.b = (-b - sqrt(discriminant)) / (2.0 * a);
-    printf("x = %lf, %lf\n", p.a, p.b);
+    double x1 = (-b + sqrt(discriminant)) / (2.0 * a);
+    double x2 = (-b - sqrt(discriminant)) / (2.0 * a);
+    printf("x = %lf, %lf\n", x1, x2);
 }
 
-void exponent() {
-    int x, n;
-    printf("Enter the values of n, x: ");
-    scanf("%d %d", &n , &x);
+void exponent(exArg arg2) {
+    int x = arg2.x;
+    int n = arg2.n;
 
     int lastX = 1;
     int lastFact = 1;
@@ -39,15 +41,21 @@ void exponent() {
 }
 
 int main() {
-    pthread_t quadThread;
-    pthread_t exThread;
-    pthread_create(&quadThread, NULL, (void *)quadratic, (void *)0);
-    pthread_join(quadThread, NULL);
-    pthread_create(&exThread, NULL, (void *)exponent, (void *)0);
-    pthread_join(exThread, NULL);
 
-    // pair x = Quadratic(a, b, c);
-    // printf("x = %lf, %lf\n", x.a, x.b);
-    exponent();
+    quadArg arg1;
+    exArg arg2;
+
+    printf("Enter the values of a, b, c: ");
+    scanf("%d %d %d", &arg1.a, &arg1.b, &arg1.c);
+
+    int x, n;
+    printf("Enter the values of n, x for e^x: ");
+    scanf("%d %d", &arg2.n, &arg2.x);
+
+    pthread_t quadThread, exThread;
+    pthread_create(&quadThread, NULL, (void *)quadratic, &arg1);
+    pthread_join(quadThread, NULL);
+    pthread_create(&exThread, NULL, (void *)exponent, &arg2);
+    pthread_join(exThread, NULL);
     return 0;
 }
