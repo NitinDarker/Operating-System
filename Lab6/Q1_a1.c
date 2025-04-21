@@ -57,5 +57,6 @@ int main() {
     pthread_join(quadThread, NULL);
     pthread_create(&exThread, NULL, (void *)exponent, &arg2);
     pthread_join(exThread, NULL);
+    
     return 0;
 }
