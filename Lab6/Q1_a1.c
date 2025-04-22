@@ -1,6 +1,6 @@
 #include <math.h>
-#include <stdio.h>
 #include <pthread.h>
+#include <stdio.h>
 
 typedef struct quadArg {
     int a, b, c;
@@ -10,34 +10,38 @@ typedef struct exArg {
     int x, n;
 } exArg;
 
-void quadratic(quadArg arg1) {
-    int a = arg1.a;
-    int b = arg1.b;
-    int c = arg1.c;
+void *quadratic(void *arg) {
+    quadArg *arg1 = (quadArg *)arg;
+    int a = arg1->a;
+    int b = arg1->b;
+    int c = arg1->c;
 
     double discriminant = b * b - 4 * a * c;
     if (discriminant < 0) {
-        printf("x is Imaginary");
-        return;
+        printf("The roots are Imaginary\n");
+        pthread_exit(NULL);
     }
     double x1 = (-b + sqrt(discriminant)) / (2.0 * a);
     double x2 = (-b - sqrt(discriminant)) / (2.0 * a);
-    printf("x = %lf, %lf\n", x1, x2);
+    printf("x = %f, %f\n", x1, x2);
+    pthread_exit(NULL);
 }
 
-void exponent(exArg arg2) {
-    int x = arg2.x;
-    int n = arg2.n;
+void *exponent(void *arg) {
+    exArg *arg2 = (exArg *)arg;
+    int x = arg2->x;
+    int n = arg2->n;
 
-    int lastX = 1;
-    int lastFact = 1;
-    double ex = 0;
+    double ex = 1.0;   // start with x^0 / 0! = 1
+    double term = 1.0; // 0th term
+
     for (int i = 1; i <= n; i++) {
-        ex += (lastX / lastFact);
-        lastX *= x;
-        lastFact *= i;
+        term *= (double)x / i;
+        ex += term;
     }
-    printf("e^x = %lf", ex);
+
+    printf("e^%d = %f\n", x, ex);
+    pthread_exit(NULL);
 }
 
 int main() {
@@ -53,10 +57,10 @@ int main() {
     scanf("%d %d", &arg2.n, &arg2.x);
 
     pthread_t quadThread, exThread;
-    pthread_create(&quadThread, NULL, (void *)quadratic, &arg1);
+    pthread_create(&quadThread, NULL, quadratic, &arg1);
+    pthread_create(&exThread, NULL, exponent, &arg2);
     pthread_join(quadThread, NULL);
-    pthread_create(&exThread, NULL, (void *)exponent, &arg2);
     pthread_join(exThread, NULL);
-    
+
     return 0;
 }
