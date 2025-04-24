@@ -14,6 +14,7 @@ void *thread_func(void *arg) {
     int type = *(int *)arg;
     free(arg);
 
+    
     if (type == 0) { // Early thread
         printf("Early thread %lu starting\n", (unsigned long)pthread_self());
 
