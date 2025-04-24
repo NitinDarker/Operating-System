@@ -8,9 +8,9 @@ struct thread_data {
     int end_row;   // Last row this thread should compute
     int N;         // Number of columns in matrixA and rows in matrixB
     int P;         // Number of columns in matrixB
-    int *matrixA;  // Pointer to matrixA (flattened 1D array)
-    int *matrixB;  // Pointer to matrixB (flattened 1D array)
-    int *result;   // Pointer to the result matrix (flattened 1D array)
+    int *matrixA;  // Pointer to matrixA 
+    int *matrixB;  // Pointer to matrixB 
+    int *result;   // Pointer to the result matrix
 };
 
 void *multiply(void *arg) {
