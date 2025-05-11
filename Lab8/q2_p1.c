@@ -8,5 +8,6 @@ int main() {
     for (;;) {
         pause();
     }
+    printf("p1 successfully completed!\n");
     return 0;
 }
