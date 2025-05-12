@@ -1,9 +1,10 @@
 #include "wildlife_fs.h"
 #include "wildlife_fs_crypto.h"
+#include <ctype.h>
 #include <errno.h>    // For errno
 #include <stdlib.h>   // For malloc, free
 #include <string.h>   // For strcpy, strcat, strlen, memset
-#include <sys/stat.h> // For mkdir (might need different includes for Windows: <direct.h>)
+#include <sys/stat.h> // For mkdir
 
 // Helper to construct full path
 static void build_full_path(const char *base, const char *filename, char *full_path_out) {
@@ -13,7 +14,6 @@ static void build_full_path(const char *base, const char *filename, char *full_p
 }
 
 int fs_init() {
-    // For POSIX systems. For Windows, use _mkdir or CreateDirectory
     int result = mkdir(FS_BASE_PATH, 0777);
     if (result == 0) {
         printf("Base directory '%s' created.\n", FS_BASE_PATH);
@@ -121,7 +121,7 @@ int fs_store_photo(const void *photo_data, size_t photo_size, const char *locati
     time_t now = time(NULL);
     // Sanitize location_tag for filename (replace non-alphanum with '_')
     char sane_location_tag[64];
-    int j = 0;
+    unsigned long int j = 0;
     for (int i = 0; location_tag[i] != '\0' && j < sizeof(sane_location_tag) - 1; ++i) {
         if (isalnum(location_tag[i]) || location_tag[i] == '_' || location_tag[i] == '-') {
             sane_location_tag[j++] = location_tag[i];
@@ -259,7 +259,7 @@ int fs_retrieve_sensor_log(const char *log_filename, SensorReading **readings_ar
 
 // --- Send/Receive Simulation ---
 // Helper for send/receive simulation
-static int copy_file_processed(const char *src_full_path, const char *dest_full_path, const char *key, int encrypt_mode) {
+static int copy_file_processed(const char *src_full_path, const char *dest_full_path, const char *key) {
     FILE *src_fp = fopen(src_full_path, "rb");
     if (!src_fp) {
         perror("copy_file_processed: fopen src failed");
@@ -313,7 +313,7 @@ int fs_send_file_simulation(const char *local_filename, const char *remote_filen
            local_filename, remote_filename_alias, key ? "encrypted" : "plain");
 
     // During send, we encrypt the file into the transfer area
-    return copy_file_processed(src_full_path, dest_full_path, key, 1 /* encrypt */);
+    return copy_file_processed(src_full_path, dest_full_path, key /* encrypt */);
 }
 
 int fs_receive_file_simulation(const char *remote_filename_alias, const char *local_filename_to_save, const char *key) {
@@ -327,5 +327,5 @@ int fs_receive_file_simulation(const char *remote_filename_alias, const char *lo
            remote_filename_alias, local_filename_to_save, key ? "decrypted" : "plain");
 
     // During receive, we decrypt the file from the transfer area
-    return copy_file_processed(src_full_path, dest_full_path, key, 0 /* decrypt */);
+    return copy_file_processed(src_full_path, dest_full_path, key /* decrypt */);
 }
