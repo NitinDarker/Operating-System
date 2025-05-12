@@ -2,6 +2,11 @@
 
 This project is a simple, C implementation of a basic file system designed for an embedded wildlife tracking device.
 
+## Source Code
+
+You can find the source code for this Lab project on GitHub:
+[NitinDarker/Operating-System/Lab10](https://github.com/NitinDarker/Operating-System/tree/main/Lab10)
+
 ## What it Does:
 
 *   **Stores Data:**
