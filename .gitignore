@@ -2,6 +2,7 @@
 Notes/
 *.exe
 *.out
+*.o
 test.sh
 test.c
 key.txt

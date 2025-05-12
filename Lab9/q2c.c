@@ -8,10 +8,10 @@ int main() {
 
     fp = popen("./q2p", "r");
 
-    printf("reading using popen\n");
+    printf("reading using popen...\n");
 
     while (fgets(data, sizeof(data), fp) != NULL) {
-        printf("%s", data);
+        printf("%s", data); // Reads line by line
     }
 
     pclose(fp);
