@@ -13,11 +13,4 @@ typedef struct {
     double longitude;
 } SensorReading;
 
-// Enum for file types
-typedef enum {
-    FILE_TYPE_PHOTO,
-    FILE_TYPE_SENSOR_LOG,
-    FILE_TYPE_UNKNOWN
-} FileType;
-
 #endif
