@@ -5,12 +5,15 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#define FIFO "/tmp/newf"
+
+// Producer
 int main() {
     int fd;
     char mes[] = "Hello World\n";
 
-    mkfifo("newf", 0666);
-    fd = open("newf", O_WRONLY);
+    mkfifo(FIFO, 0666);
+    fd = open(FIFO, O_WRONLY);
     write(fd, mes, sizeof(mes));
     printf("message sent\n");
     close(fd);

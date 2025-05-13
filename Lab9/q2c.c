@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+// Consumer
 int main() {
     FILE *fp;
     char data[100];
