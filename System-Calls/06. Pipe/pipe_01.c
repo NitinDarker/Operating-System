@@ -31,27 +31,37 @@ int main(void) {
 
 	if (pid > 0) { // Parent Process
 
+        printf("Parent process is running...\n");
+        
 		close(fd[READ_END]);
 		// Close the unused end of the pipe
 		
+        printf("write() system call: \n");
 		write(fd[WRITE_END], write_msg, strlen(write_msg)+1);
 		// Write to the pipe
 		
 		close(fd[WRITE_END]);
 		// Close the write end of the pipe now that write_msg is written
+        
+        printf("Parent process terminated~!\n");
 	}
 	else { // Child Process
-
+        
+        printf("Child process is running...\n");
+        
 		close(fd[WRITE_END]);
 		// Close the unused end of the pipe
-
+        
+        printf("read() system call: \n");
 		read(fd[READ_END], read_msg, BUFFER_SIZE);
 		// Read from the pipe
-
+        
 		printf("Read %s\n", read_msg);
 		// Prints the read message
-
+        
 		close(fd[READ_END]);
+        
+        printf("Child process terminated~!\n");
 	}
 	return 0;
 }
